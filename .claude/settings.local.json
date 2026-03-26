@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create:*)",
+      "Read(//Users/chevonnesmellie/.nvm/versions/**)",
+      "Bash(command -v node npm bun)",
+      "Bash(echo $PATH)",
+      "Read(//usr/bin/**)",
+      "mcp__Claude_Preview__preview_start"
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hoops League</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏀</text></svg>">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <span class="logo-icon">🏀</span>
+      <div>
+        <div class="brand-text">Hoops League</div>
+        <span class="brand-sub" id="brand-role">Viewer</span>
+      </div>
+    </div>
+
+    <div class="nav-tabs">
+      <!-- Rebuilt dynamically by renderNavTabs() based on role -->
+      <button class="nav-tab active" data-page="teams" onclick="navigateTo('teams')">Team Manager</button>
+      <button class="nav-tab" data-page="player-stats" onclick="navigateTo('player-stats')">Player Stats</button>
+      <button class="nav-tab" data-page="team-stats" onclick="navigateTo('team-stats')">Team Stats</button>
+      <button class="nav-tab" data-page="schedule" onclick="navigateTo('schedule')">Schedule</button>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:10px;margin-left:auto">
+      <button class="btn btn-secondary btn-sm" id="nav-auth-btn">Sign In</button>
+      <button class="navbar-team-badge" id="nav-team-badge" onclick="navigateTo('teams')" title="Manage team">
+        <span class="team-dot" style="background:#ff6b2b"></span>
+        <span>Loading…</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Pages -->
+  <main>
+    <div id="page-teams"        class="page"></div>
+    <div id="page-player-stats" class="page"></div>
+    <div id="page-team-stats"   class="page"></div>
+    <div id="page-schedule"     class="page"></div>
+    <div id="page-scorekeeper"  class="page"></div>
+  </main>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Scripts: data → auth → page modules → app shell last -->
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/teams.js"></script>
+  <script src="js/stats.js"></script>
+  <script src="js/schedule.js"></script>
+  <script src="js/scorekeeper.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
