@@ -57,21 +57,6 @@ function renderNavTabs() {
   }).join('');
 }
 
-function updateNavBadge() {
-  const { teams, activeTeamId } = getState();
-  const activeTeam = teams.find(t => t.id === activeTeamId);
-  const badge = document.getElementById('nav-team-badge');
-  if (badge) {
-    if (activeTeam) {
-      badge.innerHTML = `
-        <span class="team-dot" style="background:${activeTeam.color}"></span>
-        <span>${escHtml(activeTeam.name)}</span>
-      `;
-    } else {
-      badge.innerHTML = `<span style="color:var(--text-muted)">No Team</span>`;
-    }
-  }
-}
 
 function updateNavAuth() {
   const role = getCurrentRole();
@@ -179,7 +164,6 @@ function init() {
   // Append sign-in modal once
   document.body.insertAdjacentHTML('beforeend', renderSignInModal());
 
-  updateNavBadge();
   updateNavAuth();
   navigateTo('teams');
 }

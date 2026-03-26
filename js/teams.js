@@ -138,7 +138,7 @@ function renderTeamDetail(team, allPlayers, statLines) {
           <div class="team-info-record">${team.wins}W – ${team.losses}L · ${roster.length} Players</div>
         </div>
         <div style="display:flex;gap:8px">
-          ${!isViewer() ? `<button class="btn btn-secondary btn-sm" onclick="openEditTeamModal('${team.id}')">Edit Team</button>` : ''}
+          ${isLeagueManager() ? `<button class="btn btn-secondary btn-sm" onclick="openEditTeamModal('${team.id}')">Edit Team</button>` : ''}
           ${isLeagueManager() ? `<button class="btn btn-danger btn-sm" onclick="confirmDeleteTeam('${team.id}')">Delete</button>` : ''}
         </div>
       </div>
@@ -198,7 +198,7 @@ function renderTeamDetail(team, allPlayers, statLines) {
 }
 
 function renderNewTeamModal() {
-  const viewerNote = isViewer()
+  const viewerNote = !isLeagueManager()
     ? `<div style="background:var(--orange-glow);border:1px solid var(--orange);border-radius:var(--radius-sm);padding:10px 12px;font-size:13px;color:var(--text-muted);margin-bottom:16px">
          📋 Your request will be submitted for <strong style="color:var(--orange)">League Manager approval</strong> before going live.
        </div>`
@@ -210,7 +210,7 @@ function renderNewTeamModal() {
     <div class="modal-overlay" id="modal-new-team">
       <div class="modal" style="max-width:580px">
         <div class="modal-header">
-          <h3>${isViewer() ? 'Request New Team' : 'Create New Team'}</h3>
+          <h3>${isLeagueManager() ? 'Create New Team' : 'Request New Team'}</h3>
           <button class="modal-close" onclick="closeModal('modal-new-team')">×</button>
         </div>
         <div class="modal-body">
@@ -262,7 +262,7 @@ function renderNewTeamModal() {
         <div class="modal-footer">
           <button class="btn btn-secondary" onclick="closeModal('modal-new-team')">Cancel</button>
           <button class="btn btn-primary" onclick="submitNewTeam()">
-            ${isViewer() ? 'Submit for Approval' : 'Create Team'}
+            ${isLeagueManager() ? 'Create Team' : 'Submit for Approval'}
           </button>
         </div>
       </div>
@@ -370,7 +370,7 @@ function renderEditTeamModal(team) {
 
 function renderAddPlayerModal() {
   const { teams } = getState();
-  const viewerNote = isViewer()
+  const viewerNote = !isLeagueManager()
     ? `<div style="background:var(--orange-glow);border:1px solid var(--orange);border-radius:var(--radius-sm);padding:10px 12px;font-size:13px;color:var(--text-muted);margin-bottom:16px">
          📋 Your request will be submitted for <strong style="color:var(--orange)">League Manager approval</strong> before going live.
        </div>`
@@ -380,7 +380,7 @@ function renderAddPlayerModal() {
     <div class="modal-overlay" id="modal-add-player">
       <div class="modal">
         <div class="modal-header">
-          <h3>${isViewer() ? 'Request to Add Player' : 'Add Player'}</h3>
+          <h3>${isLeagueManager() ? 'Add Player' : 'Request to Add Player'}</h3>
           <button class="modal-close" onclick="closeModal('modal-add-player')">×</button>
         </div>
         <div class="modal-body">
@@ -410,7 +410,7 @@ function renderAddPlayerModal() {
         <div class="modal-footer">
           <button class="btn btn-secondary" onclick="closeModal('modal-add-player')">Cancel</button>
           <button class="btn btn-primary" onclick="submitAddPlayer()">
-            ${isViewer() ? 'Submit for Approval' : 'Add Player'}
+            ${isLeagueManager() ? 'Add Player' : 'Submit for Approval'}
           </button>
         </div>
       </div>
@@ -468,7 +468,7 @@ function submitNewTeam() {
   const nums = players.map(p => String(p.number));
   if (nums.length !== new Set(nums).size) return showToast('Two players share the same jersey number', 'error');
 
-  if (isViewer()) {
+  if (!isLeagueManager()) {
     // Bundle players into the team request so the manager sees them as one grouped item
     submitPendingItem('team', { name, abbr, color, email, players });
     closeModal('modal-new-team');
@@ -488,7 +488,7 @@ function submitNewTeam() {
     : `${name} created!`;
   showToast(msg, 'success');
   renderTeamsPage();
-  updateNavBadge();
+
 }
 
 function submitEditTeam(id) {
@@ -507,7 +507,7 @@ function submitEditTeam(id) {
   closeModal('modal-edit-team');
   showToast('Team updated!', 'success');
   renderTeamsPage();
-  updateNavBadge();
+
 }
 
 function confirmDeleteTeam(id) {
@@ -517,7 +517,7 @@ function confirmDeleteTeam(id) {
   deleteTeam(id);
   showToast(`${team.name} deleted`, 'info');
   renderTeamsPage();
-  updateNavBadge();
+
 }
 
 function submitAddPlayer() {
@@ -535,7 +535,7 @@ function submitAddPlayer() {
     return showToast(`Jersey #${number} is already taken on this team`, 'error');
   }
 
-  if (isViewer()) {
+  if (!isLeagueManager()) {
     submitPendingItem('player', { name, number, position, teamId, email });
     closeModal('modal-add-player');
     showToast('Player request submitted for approval!', 'info');
@@ -561,7 +561,7 @@ function approvePending(id) {
   approvePendingItem(id);
   showToast('Approved and added to the league!', 'success');
   renderTeamsPage();
-  updateNavBadge();
+
   updatePendingBadge();
 }
 
