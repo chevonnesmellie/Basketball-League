@@ -136,6 +136,7 @@ function renderTeamDetail(team, allPlayers, statLines) {
         <div style="flex:1">
           <div class="team-info-name">${team.name}</div>
           <div class="team-info-record">${team.wins}W – ${team.losses}L · ${roster.length} Players</div>
+          ${isLeagueManager() && team.email ? `<div style="font-size:12px;margin-top:4px"><a href="mailto:${escHtml(team.email)}" style="color:var(--text-muted)">${escHtml(team.email)}</a></div>` : ''}
         </div>
         <div style="display:flex;gap:8px">
           ${isLeagueManager() ? `<button class="btn btn-secondary btn-sm" onclick="openEditTeamModal('${team.id}')">Edit Team</button>` : ''}
@@ -168,6 +169,7 @@ function renderTeamDetail(team, allPlayers, statLines) {
                 <th>PPG</th>
                 <th>RPG</th>
                 <th>APG</th>
+                ${isLeagueManager() ? '<th>Email</th>' : ''}
                 <th></th>
               </tr>
             </thead>
@@ -183,6 +185,7 @@ function renderTeamDetail(team, allPlayers, statLines) {
                     <td class="td-highlight">${avg.ppg}</td>
                     <td class="td-mono">${avg.rpg}</td>
                     <td class="td-mono">${avg.apg}</td>
+                    ${isLeagueManager() ? `<td class="td-muted" style="font-size:12px">${p.email ? `<a href="mailto:${escHtml(p.email)}" style="color:var(--text-muted)">${escHtml(p.email)}</a>` : '—'}</td>` : ''}
                     <td>
                       ${isLeagueManager() ? `<button class="btn btn-ghost btn-sm" onclick="confirmRemovePlayer('${p.id}','${escHtml(p.name)}')" title="Remove player">✕</button>` : ''}
                     </td>
@@ -479,7 +482,7 @@ function submitNewTeam() {
     return;
   }
 
-  const team = addTeam({ name, abbr, color });
+  const team = addTeam({ name, abbr, color, email });
   players.forEach(p => addPlayer({ ...p, teamId: team.id }));
 
   closeModal('modal-new-team');
@@ -542,7 +545,7 @@ function submitAddPlayer() {
     return;
   }
 
-  addPlayer({ name, number, position, teamId });
+  addPlayer({ name, number, position, teamId, email });
   closeModal('modal-add-player');
   showToast(`${name} added to roster!`, 'success');
   renderTeamsPage();

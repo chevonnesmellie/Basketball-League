@@ -165,8 +165,8 @@ function getState() {
 
 // ─── Team Actions ─────────────────────────────────────────────────────────────
 
-function addTeam({ name, abbr, color }) {
-  const team = { id: uuid(), name, abbr: abbr.toUpperCase().slice(0, 3), color, wins: 0, losses: 0 };
+function addTeam({ name, abbr, color, email }) {
+  const team = { id: uuid(), name, abbr: abbr.toUpperCase().slice(0, 3), color, wins: 0, losses: 0, email: email || '' };
   state.teams.push(team);
   state.activeTeamId = team.id;
   saveState();
@@ -198,8 +198,8 @@ function setActiveTeam(id) {
 
 // ─── Player Actions ───────────────────────────────────────────────────────────
 
-function addPlayer({ name, number, position, teamId }) {
-  const player = { id: uuid(), name, number: parseInt(number), position, teamId, isActive: true };
+function addPlayer({ name, number, position, teamId, email }) {
+  const player = { id: uuid(), name, number: parseInt(number), position, teamId, isActive: true, email: email || '' };
   state.players.push(player);
   saveState();
   return player;
